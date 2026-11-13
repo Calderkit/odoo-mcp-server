@@ -1,0 +1,92 @@
+{
+ "legacy/initialize": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"protocolVersion\": \"2025-11-25\", \"capabilities\": {\"tools\": {\"listChanged\": false}}, \"serverInfo\": {\"name\": \"odoo-mcp-calderkit\", \"title\": \"Odoo MCP Server\", \"version\": \"<version>\"}, \"instructions\": \"This server gives access to an Odoo database as the signed-in user, with that user's access rights. Start with odoo_context (current user, company and date) and odoo_list_models. Call odoo_describe_model before filtering a model you have not used yet. Domains use Odoo syntax: a list of [field, operator, value] conditions, all combined with AND unless you add '|' (OR) or '!' (NOT) prefixes, e.g. [[\\\"state\\\", \\\"=\\\", \\\"sale\\\"], [\\\"date_order\\\", \\\">=\\\", \\\"2026-01-01\\\"]]. Dates are 'YYYY-MM-DD'; datetimes are UTC 'YYYY-MM-DD HH:MM:SS'. Use odoo_aggregate for totals and counts per group instead of reading many records. Results are paged: use offset when has_more is true.\"}}"
+ },
+ "legacy/ping": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {}}"
+ },
+ "legacy/prompts/list": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"prompts\": []}}"
+ },
+ "legacy/resources/list": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"resources\": []}}"
+ },
+ "legacy/resources/read": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -32601, \"message\": \"Method not found: resources/read\"}, \"id\": 1}"
+ },
+ "legacy/resources/read-no-uri": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -32601, \"message\": \"Method not found: resources/read\"}, \"id\": 1}"
+ },
+ "legacy/resources/templates/list": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"resourceTemplates\": []}}"
+ },
+ "legacy/server/discover": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"supportedVersions\": [\"2026-07-28\", \"2025-11-25\", \"2025-06-18\", \"2025-03-26\"], \"capabilities\": {\"tools\": {\"listChanged\": false}}, \"instructions\": \"This server gives access to an Odoo database as the signed-in user, with that user's access rights. Start with odoo_context (current user, company and date) and odoo_list_models. Call odoo_describe_model before filtering a model you have not used yet. Domains use Odoo syntax: a list of [field, operator, value] conditions, all combined with AND unless you add '|' (OR) or '!' (NOT) prefixes, e.g. [[\\\"state\\\", \\\"=\\\", \\\"sale\\\"], [\\\"date_order\\\", \\\">=\\\", \\\"2026-01-01\\\"]]. Dates are 'YYYY-MM-DD'; datetimes are UTC 'YYYY-MM-DD HH:MM:SS'. Use odoo_aggregate for totals and counts per group instead of reading many records. Results are paged: use offset when has_more is true.\"}}"
+ },
+ "legacy/tools/list": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"tools\": [{\"name\": \"odoo_context\", \"title\": \"Current user and date\", \"description\": \"Who you are connected as, the current company, language, time zone, the current date and time, and the Odoo version.\", \"inputSchema\": {\"type\": \"object\", \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_list_models\", \"title\": \"List available models\", \"description\": \"Models (tables) you are allowed to use, with a short hint about what each one holds.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"search\": {\"type\": \"string\", \"description\": \"Optional text to filter models.\"}}, \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_describe_model\", \"title\": \"Describe a model\", \"description\": \"Fields of a model: technical name, label, type, related model, selection values. Use it before building a domain.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}}, \"required\": [\"model\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_search\", \"title\": \"Search records\", \"description\": \"Find records matching a domain and return their fields. Returns the total number of matches and one page of records.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}, \"domain\": {\"type\": \"array\", \"default\": [], \"description\": \"Odoo domain, e.g. [[\\\"customer_rank\\\", \\\">\\\", 0], [\\\"country_id.code\\\", \\\"=\\\", \\\"BE\\\"]].\"}, \"fields\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"description\": \"Field names to return. Leave empty for a sensible default set.\"}, \"limit\": {\"type\": \"integer\", \"minimum\": 1, \"maximum\": 500, \"default\": 20}, \"offset\": {\"type\": \"integer\", \"minimum\": 0, \"default\": 0}, \"order\": {\"type\": \"string\", \"description\": \"Sort order, e.g. 'date_order desc, id desc'.\"}}, \"required\": [\"model\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_read\", \"title\": \"Read records\", \"description\": \"Read records by id.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}, \"ids\": {\"type\": \"array\", \"items\": {\"type\": \"integer\"}, \"maxItems\": 100}, \"fields\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"description\": \"Field names to return. Leave empty for a sensible default set.\"}}, \"required\": [\"model\", \"ids\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_count\", \"title\": \"Count records\", \"description\": \"Number of records matching a domain.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}, \"domain\": {\"type\": \"array\", \"default\": [], \"description\": \"Odoo domain, e.g. [[\\\"customer_rank\\\", \\\">\\\", 0], [\\\"country_id.code\\\", \\\"=\\\", \\\"BE\\\"]].\"}}, \"required\": [\"model\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_aggregate\", \"title\": \"Totals by group\", \"description\": \"Group records and compute totals, e.g. sales per customer per month. groupby items: 'partner_id' or 'date_order:month' (day, week, month, quarter, year). measures: '__count' or 'amount_total:sum' (sum, avg, min, max, count, count_distinct).\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}, \"domain\": {\"type\": \"array\", \"default\": [], \"description\": \"Odoo domain, e.g. [[\\\"customer_rank\\\", \\\">\\\", 0], [\\\"country_id.code\\\", \\\"=\\\", \\\"BE\\\"]].\"}, \"groupby\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"default\": []}, \"measures\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"default\": [\"__count\"]}, \"order\": {\"type\": \"string\", \"description\": \"Sort groups, e.g. 'amount_total:sum desc' or '__count desc'. Default: by group.\"}, \"limit\": {\"type\": \"integer\", \"minimum\": 1, \"maximum\": 500, \"default\": 100}}, \"required\": [\"model\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}]}}"
+ },
+ "modern/initialize": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"protocolVersion\": \"2025-11-25\", \"capabilities\": {\"tools\": {\"listChanged\": false}}, \"serverInfo\": {\"name\": \"odoo-mcp-calderkit\", \"title\": \"Odoo MCP Server\", \"version\": \"<version>\"}, \"instructions\": \"This server gives access to an Odoo database as the signed-in user, with that user's access rights. Start with odoo_context (current user, company and date) and odoo_list_models. Call odoo_describe_model before filtering a model you have not used yet. Domains use Odoo syntax: a list of [field, operator, value] conditions, all combined with AND unless you add '|' (OR) or '!' (NOT) prefixes, e.g. [[\\\"state\\\", \\\"=\\\", \\\"sale\\\"], [\\\"date_order\\\", \\\">=\\\", \\\"2026-01-01\\\"]]. Dates are 'YYYY-MM-DD'; datetimes are UTC 'YYYY-MM-DD HH:MM:SS'. Use odoo_aggregate for totals and counts per group instead of reading many records. Results are paged: use offset when has_more is true.\", \"resultType\": \"complete\", \"_meta\": {\"io.modelcontextprotocol/serverInfo\": {\"name\": \"odoo-mcp-calderkit\", \"title\": \"Odoo MCP Server\", \"version\": \"<version>\"}}}}"
+ },
+ "modern/ping": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"resultType\": \"complete\", \"_meta\": {\"io.modelcontextprotocol/serverInfo\": {\"name\": \"odoo-mcp-calderkit\", \"title\": \"Odoo MCP Server\", \"version\": \"<version>\"}}}}"
+ },
+ "modern/prompts/list": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"prompts\": [], \"ttlMs\": 300000, \"cacheScope\": \"private\", \"resultType\": \"complete\", \"_meta\": {\"io.modelcontextprotocol/serverInfo\": {\"name\": \"odoo-mcp-calderkit\", \"title\": \"Odoo MCP Server\", \"version\": \"<version>\"}}}}"
+ },
+ "modern/resources/list": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"resources\": [], \"ttlMs\": 300000, \"cacheScope\": \"private\", \"resultType\": \"complete\", \"_meta\": {\"io.modelcontextprotocol/serverInfo\": {\"name\": \"odoo-mcp-calderkit\", \"title\": \"Odoo MCP Server\", \"version\": \"<version>\"}}}}"
+ },
+ "modern/resources/read": {
+  "content_type": "application/json",
+  "status": 404,
+  "text": "{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -32601, \"message\": \"Method not found: resources/read\"}, \"id\": 1}"
+ },
+ "modern/resources/read-no-uri": {
+  "content_type": "application/json",
+  "status": 404,
+  "text": "{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -32601, \"message\": \"Method not found: resources/read\"}, \"id\": 1}"
+ },
+ "modern/resources/templates/list": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"resourceTemplates\": [], \"ttlMs\": 300000, \"cacheScope\": \"private\", \"resultType\": \"complete\", \"_meta\": {\"io.modelcontextprotocol/serverInfo\": {\"name\": \"odoo-mcp-calderkit\", \"title\": \"Odoo MCP Server\", \"version\": \"<version>\"}}}}"
+ },
+ "modern/server/discover": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"supportedVersions\": [\"2026-07-28\", \"2025-11-25\", \"2025-06-18\", \"2025-03-26\"], \"capabilities\": {\"tools\": {\"listChanged\": false}}, \"instructions\": \"This server gives access to an Odoo database as the signed-in user, with that user's access rights. Start with odoo_context (current user, company and date) and odoo_list_models. Call odoo_describe_model before filtering a model you have not used yet. Domains use Odoo syntax: a list of [field, operator, value] conditions, all combined with AND unless you add '|' (OR) or '!' (NOT) prefixes, e.g. [[\\\"state\\\", \\\"=\\\", \\\"sale\\\"], [\\\"date_order\\\", \\\">=\\\", \\\"2026-01-01\\\"]]. Dates are 'YYYY-MM-DD'; datetimes are UTC 'YYYY-MM-DD HH:MM:SS'. Use odoo_aggregate for totals and counts per group instead of reading many records. Results are paged: use offset when has_more is true.\", \"ttlMs\": 300000, \"cacheScope\": \"private\", \"resultType\": \"complete\", \"_meta\": {\"io.modelcontextprotocol/serverInfo\": {\"name\": \"odoo-mcp-calderkit\", \"title\": \"Odoo MCP Server\", \"version\": \"<version>\"}}}}"
+ },
+ "modern/tools/list": {
+  "content_type": "application/json",
+  "status": 200,
+  "text": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"tools\": [{\"name\": \"odoo_context\", \"title\": \"Current user and date\", \"description\": \"Who you are connected as, the current company, language, time zone, the current date and time, and the Odoo version.\", \"inputSchema\": {\"type\": \"object\", \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_list_models\", \"title\": \"List available models\", \"description\": \"Models (tables) you are allowed to use, with a short hint about what each one holds.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"search\": {\"type\": \"string\", \"description\": \"Optional text to filter models.\"}}, \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_describe_model\", \"title\": \"Describe a model\", \"description\": \"Fields of a model: technical name, label, type, related model, selection values. Use it before building a domain.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}}, \"required\": [\"model\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_search\", \"title\": \"Search records\", \"description\": \"Find records matching a domain and return their fields. Returns the total number of matches and one page of records.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}, \"domain\": {\"type\": \"array\", \"default\": [], \"description\": \"Odoo domain, e.g. [[\\\"customer_rank\\\", \\\">\\\", 0], [\\\"country_id.code\\\", \\\"=\\\", \\\"BE\\\"]].\"}, \"fields\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"description\": \"Field names to return. Leave empty for a sensible default set.\"}, \"limit\": {\"type\": \"integer\", \"minimum\": 1, \"maximum\": 500, \"default\": 20}, \"offset\": {\"type\": \"integer\", \"minimum\": 0, \"default\": 0}, \"order\": {\"type\": \"string\", \"description\": \"Sort order, e.g. 'date_order desc, id desc'.\"}}, \"required\": [\"model\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_read\", \"title\": \"Read records\", \"description\": \"Read records by id.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}, \"ids\": {\"type\": \"array\", \"items\": {\"type\": \"integer\"}, \"maxItems\": 100}, \"fields\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"description\": \"Field names to return. Leave empty for a sensible default set.\"}}, \"required\": [\"model\", \"ids\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_count\", \"title\": \"Count records\", \"description\": \"Number of records matching a domain.\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}, \"domain\": {\"type\": \"array\", \"default\": [], \"description\": \"Odoo domain, e.g. [[\\\"customer_rank\\\", \\\">\\\", 0], [\\\"country_id.code\\\", \\\"=\\\", \\\"BE\\\"]].\"}}, \"required\": [\"model\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}, {\"name\": \"odoo_aggregate\", \"title\": \"Totals by group\", \"description\": \"Group records and compute totals, e.g. sales per customer per month. groupby items: 'partner_id' or 'date_order:month' (day, week, month, quarter, year). measures: '__count' or 'amount_total:sum' (sum, avg, min, max, count, count_distinct).\", \"inputSchema\": {\"type\": \"object\", \"properties\": {\"model\": {\"type\": \"string\", \"description\": \"Technical model name, e.g. 'res.partner'.\"}, \"domain\": {\"type\": \"array\", \"default\": [], \"description\": \"Odoo domain, e.g. [[\\\"customer_rank\\\", \\\">\\\", 0], [\\\"country_id.code\\\", \\\"=\\\", \\\"BE\\\"]].\"}, \"groupby\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"default\": []}, \"measures\": {\"type\": \"array\", \"items\": {\"type\": \"string\"}, \"default\": [\"__count\"]}, \"order\": {\"type\": \"string\", \"description\": \"Sort groups, e.g. 'amount_total:sum desc' or '__count desc'. Default: by group.\"}, \"limit\": {\"type\": \"integer\", \"minimum\": 1, \"maximum\": 500, \"default\": 100}}, \"required\": [\"model\"], \"additionalProperties\": false}, \"annotations\": {\"readOnlyHint\": true, \"destructiveHint\": false, \"idempotentHint\": true, \"openWorldHint\": false}}], \"ttlMs\": 300000, \"cacheScope\": \"private\", \"resultType\": \"complete\", \"_meta\": {\"io.modelcontextprotocol/serverInfo\": {\"name\": \"odoo-mcp-calderkit\", \"title\": \"Odoo MCP Server\", \"version\": \"<version>\"}}}}"
+ }
+}

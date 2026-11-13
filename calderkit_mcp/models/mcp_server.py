@@ -117,7 +117,15 @@ class CalderkitMcpServer(models.AbstractModel):
 
     @api.model
     def _mcp_capabilities(self):
-        return {'tools': {'listChanged': False}}
+        capabilities = {'tools': {'listChanged': False}}
+        if self._mcp_resources():
+            capabilities['resources'] = {'listChanged': False}
+        return capabilities
+
+    @api.model
+    def _mcp_resources(self):
+        """{uri: (definition, method name)} of the available resources."""
+        return {}
 
     @api.model
     def _mcp_tools(self):
@@ -260,11 +268,13 @@ class CalderkitMcpServer(models.AbstractModel):
             'ping': lambda params, era, client: {},
             'tools/list': self._mcp_tools_list,
             'tools/call': self._mcp_tools_call,
-            'resources/list': lambda params, era, client: self._mcp_cacheable({'resources': []}, era),
+            'resources/list': self._mcp_resources_list,
             'resources/templates/list': lambda params, era, client: self._mcp_cacheable(
                 {'resourceTemplates': []}, era),
             'prompts/list': lambda params, era, client: self._mcp_cacheable({'prompts': []}, era),
         }
+        if self._mcp_resources():
+            handlers['resources/read'] = self._mcp_resources_read
         handler = handlers.get(method)
         if handler is None:
             raise McpProtocolError(METHOD_NOT_FOUND, 'Method not found: %s' % method,
@@ -300,6 +310,21 @@ class CalderkitMcpServer(models.AbstractModel):
     def _mcp_tools_list(self, params, era, client):
         tools = [definition for definition, _method in self._mcp_tools().values()]
         return self._mcp_cacheable({'tools': tools}, era)
+
+    def _mcp_resources_list(self, params, era, client):
+        resources = [definition for definition, _method in self._mcp_resources().values()]
+        return self._mcp_cacheable({'resources': resources}, era)
+
+    def _mcp_resources_read(self, params, era, client):
+        uri = params.get('uri')
+        if not isinstance(uri, str):
+            raise McpProtocolError(INVALID_PARAMS, 'uri must be a string')
+        resources = self._mcp_resources()
+        if uri not in resources:
+            code = INVALID_PARAMS if era == 'modern' else -32002
+            raise McpProtocolError(code, 'Unknown resource: %s' % uri)
+        result = getattr(self, resources[uri][1])(uri)
+        return self._mcp_cacheable(result, era)
 
     def _mcp_tools_call(self, params, era, client):
         name = params.get('name')

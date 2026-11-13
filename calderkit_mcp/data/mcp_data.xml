@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="ir_cron_mcp_log_purge" model="ir.cron">
+        <field name="name">MCP Server: delete old call logs</field>
+        <field name="model_id" ref="model_calderkit_mcp_log"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_purge()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

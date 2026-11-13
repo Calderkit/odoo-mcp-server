@@ -1,0 +1,27 @@
+{
+    'name': 'MCP Server',
+    'version': '19.0.1.0.0',
+    'summary': 'Connect Claude, ChatGPT, Cursor and other AI assistants to Odoo through '
+               'the Model Context Protocol. Read-only, with your access rights.',
+    'description': 'See static/description/index.html',
+    'category': 'Productivity',
+    'author': 'Calderkit',
+    'website': 'https://calderkit.com',
+    'support': 'odoo@calderkit.com',
+    'license': 'LGPL-3',
+    'depends': ['web'],
+    'data': [
+        'security/mcp_security.xml',
+        'security/ir.model.access.csv',
+        'security/mcp_rules.xml',
+        'data/mcp_data.xml',
+        'views/mcp_model_views.xml',
+        'views/mcp_log_views.xml',
+        'views/mcp_setup_views.xml',
+        'views/menus.xml',
+    ],
+    'images': ['static/description/banner.png'],
+    'post_init_hook': 'post_init_hook',
+    'application': True,
+    'installable': True,
+}

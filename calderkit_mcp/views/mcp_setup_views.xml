@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mcp_setup_form" model="ir.ui.view">
+        <field name="name">calderkit.mcp.setup.form</field>
+        <field name="model">calderkit.mcp.setup</field>
+        <field name="arch" type="xml">
+            <form string="Connect an AI assistant" create="0" delete="0">
+                <header>
+                    <button name="action_open_models" type="object" string="Choose Models"
+                            class="btn-primary" groups="calderkit_mcp.group_mcp_manager"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Connect an AI assistant</h1>
+                    </div>
+                    <group>
+                        <field name="endpoint_url" widget="CopyClipboardChar" readonly="1"/>
+                        <field name="database" readonly="1"/>
+                        <field name="model_count" readonly="1"/>
+                    </group>
+                    <h3 class="mt-4">1. Create an API key</h3>
+                    <p>Open your user menu, then <b>My Preferences</b> (or <b>Preferences</b>),
+                       tab <b>Security</b>, and click <b>Create API Key</b> (<b>New API Key</b> in older versions). Where Odoo asks for a scope,
+                       choose <b>MCP (AI assistants only)</b>: such a key cannot be used for anything else.
+                       Copy the key: it is shown only once. The AI assistant will act with your access rights.</p>
+                    <h3 class="mt-4">2. Add the server to your AI client</h3>
+                    <p>Claude Code:</p>
+                    <field name="snippet_claude_code" widget="CopyClipboardText" readonly="1"/>
+                    <p class="mt-3">Cursor, Claude Desktop, VS Code and other clients that accept a JSON configuration:</p>
+                    <field name="snippet_json" widget="code" options="{'mode': 'javascript'}" readonly="1"/>
+                    <p class="mt-3">Replace YOUR_API_KEY with the key from step 1.</p>
+                    <h3 class="mt-4">3. Ask</h3>
+                    <p>For example: <i>"Which customers bought the most last quarter?"</i> or
+                       <i>"List the open purchase orders for Wood Corner."</i></p>
+                    <div class="alert alert-info mt-4" role="status" name="oauth_note">
+                        The server URL must reach this database directly: either the server hosts a single
+                        database, or a database filter maps this hostname to it. Web connectors that sign in
+                        with OAuth (Claude.ai, ChatGPT in the browser) are not supported by this app: use a desktop
+                        or command-line client with an API key.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mcp_setup_open" model="ir.actions.server">
+        <field name="name">Connect</field>
+        <field name="model_id" ref="model_calderkit_mcp_setup"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_setup()</field>
+    </record>
+</odoo>

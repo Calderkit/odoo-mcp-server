@@ -1,0 +1,6 @@
+id,name,model_id,group_id/id,operation,domain
+access_mcp_model_user,MCP model: user,calderkit.mcp.model,calderkit_mcp.group_mcp_user,r,
+access_mcp_model_manager,MCP model: manager,calderkit.mcp.model,calderkit_mcp.group_mcp_manager,crud,
+access_mcp_log_user,MCP log: own calls,calderkit.mcp.log,calderkit_mcp.group_mcp_user,r,"[('user_id', '=', user.id)]"
+access_mcp_log_manager,MCP log: manager,calderkit.mcp.log,calderkit_mcp.group_mcp_manager,r,
+access_mcp_setup_user,MCP setup: user,calderkit.mcp.setup,calderkit_mcp.group_mcp_user,crud,

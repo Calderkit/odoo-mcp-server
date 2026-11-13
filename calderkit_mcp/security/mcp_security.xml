@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="res.groups.privilege" id="privilege_mcp">
+        <field name="name">MCP Server</field>
+        <field name="sequence">91</field>
+        <field name="category_id" ref="base.module_category_administration"/>
+    </record>
+
+    <record id="group_mcp_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="sequence">10</field>
+        <field name="privilege_id" ref="privilege_mcp"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can connect an AI assistant to Odoo with their own access rights.</field>
+    </record>
+
+    <record id="group_mcp_manager" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="sequence">20</field>
+        <field name="privilege_id" ref="privilege_mcp"/>
+        <field name="implied_ids" eval="[(4, ref('group_mcp_user'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        <field name="comment">Chooses which models AI assistants can use and sees all calls.</field>
+    </record>
+</odoo>

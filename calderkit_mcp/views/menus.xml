@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mcp_root"
+              name="MCP Server"
+              web_icon="calderkit_mcp,static/description/icon.png"
+              groups="group_mcp_user"
+              sequence="96"/>
+
+    <menuitem id="menu_mcp_setup"
+              name="Connect"
+              parent="menu_mcp_root"
+              action="action_mcp_setup_open"
+              sequence="10"/>
+
+    <menuitem id="menu_mcp_log"
+              name="Calls"
+              parent="menu_mcp_root"
+              action="action_mcp_log"
+              sequence="20"/>
+
+    <menuitem id="menu_mcp_config"
+              name="Configuration"
+              parent="menu_mcp_root"
+              groups="group_mcp_manager"
+              sequence="90"/>
+
+    <menuitem id="menu_mcp_model"
+              name="Models"
+              parent="menu_mcp_config"
+              action="action_mcp_model"
+              sequence="10"/>
+</odoo>

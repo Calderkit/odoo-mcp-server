@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mcp_model_user,mcp model user,model_calderkit_mcp_model,group_mcp_user,1,0,0,0
+access_mcp_model_manager,mcp model manager,model_calderkit_mcp_model,group_mcp_manager,1,1,1,1
+access_mcp_log_user,mcp log user,model_calderkit_mcp_log,group_mcp_user,1,0,0,0
+access_mcp_setup_user,mcp setup user,model_calderkit_mcp_setup,group_mcp_user,1,1,1,1

@@ -1,0 +1,138 @@
+<section class="container" style="padding: 32px 0 8px 0;">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h2 style="font-size: 34px; font-weight: 700; color: #111413; margin-bottom: 8px;">MCP Server for Odoo</h2>
+            <p style="font-size: 19px; color: #4a524f; margin-bottom: 18px;">
+                Ask your AI assistant about your Odoo data. Claude, ChatGPT, Cursor, VS Code and any client that
+                speaks the Model Context Protocol can search, read and total your records, with your own access rights.
+            </p>
+            <p>
+                <span class="badge rounded-pill" style="background-color: #e3f1ee; color: #0e7c6f; font-size: 14px; padding: 7px 14px; margin: 3px;">Free</span>
+                <span class="badge rounded-pill" style="background-color: #e3f1ee; color: #0e7c6f; font-size: 14px; padding: 7px 14px; margin: 3px;">Community and Enterprise</span>
+                <span class="badge rounded-pill" style="background-color: #e3f1ee; color: #0e7c6f; font-size: 14px; padding: 7px 14px; margin: 3px;">Read-only</span>
+                <span class="badge rounded-pill" style="background-color: #e3f1ee; color: #0e7c6f; font-size: 14px; padding: 7px 14px; margin: 3px;">MCP 2026-07-28 and 2025 versions</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="container" style="padding: 8px 0 24px 0;">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <div style="border: 1px solid #e4e7e5; border-radius: 12px; padding: 22px 26px; background-color: #fafaf8;">
+                <p style="font-size: 13px; color: #6a716e; margin-bottom: 10px;">Example, on the Odoo demo database</p>
+                <p style="font-size: 16px; margin-bottom: 8px;"><b>You:</b> Which confirmed sales orders are the largest?</p>
+                <p style="font-size: 14px; color: #6a716e; margin-bottom: 8px;">The assistant calls <code>odoo_search</code> on Sales Order, state = sale, sorted by total.</p>
+                <p style="font-size: 16px; margin-bottom: 0;"><b>Assistant:</b> The three largest are S00020 for Joel Willis (3,389.63), then S00004 (2,240.00) and S00007 (1,706.00), both for Gemini Furniture.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container" style="padding: 8px 0 16px 0;">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <div class="row">
+                <div class="col-md-6" style="margin-bottom: 18px;">
+                    <h4 style="font-size: 18px; font-weight: 700; color: #0e7c6f;">Seven read-only tools</h4>
+                    <p style="color: #333;">Current user and date, list of models, model fields, search, read by id, count, and totals by group
+                        (for example revenue per customer per month). The assistant gets the total number of matches and pages through results.</p>
+                </div>
+                <div class="col-md-6" style="margin-bottom: 18px;">
+                    <h4 style="font-size: 18px; font-weight: 700; color: #0e7c6f;">Your access rights, nothing more</h4>
+                    <p style="color: #333;">The assistant signs in with a personal API key and sees exactly what that user sees in Odoo:
+                        record rules, multi-company and field groups all apply. Nothing can be created, changed or deleted.</p>
+                </div>
+                <div class="col-md-6" style="margin-bottom: 18px;">
+                    <h4 style="font-size: 18px; font-weight: 700; color: #0e7c6f;">Only the models you allow</h4>
+                    <p style="color: #333;">An administrator chooses the models, adds a short hint for each, and can hide extra fields.
+                        Passwords, tokens, keys, signatures and files are never shown. Users, settings and technical tables cannot be added.</p>
+                </div>
+                <div class="col-md-6" style="margin-bottom: 18px;">
+                    <h4 style="font-size: 18px; font-weight: 700; color: #0e7c6f;">A key that only works for AI</h4>
+                    <p style="color: #333;">On Odoo 20 the app adds an "MCP (AI assistants only)" scope to API keys: such a key
+                        cannot be used for any other API. Earlier versions use your regular API keys.</p>
+                </div>
+                <div class="col-md-6" style="margin-bottom: 18px;">
+                    <h4 style="font-size: 18px; font-weight: 700; color: #0e7c6f;">Every call is logged</h4>
+                    <p style="color: #333;">Who called which tool, on which model, with which filters, how many records came back,
+                        how long it took, and any error. Users see their own calls; administrators see all.</p>
+                </div>
+                <div class="col-md-6" style="margin-bottom: 18px;">
+                    <h4 style="font-size: 18px; font-weight: 700; color: #0e7c6f;">Current protocol, old clients too</h4>
+                    <p style="color: #333;">Implements MCP 2026-07-28 (stateless, server/discover) and still answers clients that use the
+                        2025 handshake. Tested with the official MCP Python SDK in both modes.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="container" style="padding: 8px 0;">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <h3 style="font-size: 24px; font-weight: 700; color: #111413;">Screenshots</h3>
+            <p style="color: #4a524f; margin-top: 18px;">The Connect page gives the server URL and ready-to-paste configuration:</p>
+            <img src="mcp_connect.png" class="img-fluid" style="border: 1px solid #e4e7e5; border-radius: 10px;" alt="Connect an AI assistant"/>
+            <p style="color: #4a524f; margin-top: 28px;">Choose the models, with a hint for the assistant:</p>
+            <img src="mcp_models.png" class="img-fluid" style="border: 1px solid #e4e7e5; border-radius: 10px;" alt="Models available to AI assistants"/>
+            <p style="color: #4a524f; margin-top: 28px;">Every call, including refused ones:</p>
+            <img src="mcp_calls.png" class="img-fluid" style="border: 1px solid #e4e7e5; border-radius: 10px;" alt="Log of MCP calls"/>
+            <p style="color: #4a524f; margin-top: 28px;">The details of one call:</p>
+            <img src="mcp_call_detail.png" class="img-fluid" style="border: 1px solid #e4e7e5; border-radius: 10px;" alt="One MCP call"/>
+            <p style="color: #4a524f; margin-top: 28px;">An API key limited to AI assistants (Odoo 20):</p>
+            <img src="mcp_api_key.png" class="img-fluid" style="border: 1px solid #e4e7e5; border-radius: 10px; max-width: 520px;" alt="API key with the MCP scope"/>
+        </div>
+    </div>
+</section>
+
+<section class="container" style="padding: 24px 0 8px 0;">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <h3 style="font-size: 24px; font-weight: 700; color: #111413;">Connect in three steps</h3>
+            <ol style="font-size: 16px; color: #333;">
+                <li>Install the app. Administrators get access; give other users the "MCP Server / User" role.</li>
+                <li>Create an API key: user menu, Preferences, Security, Create API Key.</li>
+                <li>Open MCP Server, then Connect, and paste the shown configuration into your AI client, with your key.</li>
+            </ol>
+            <p style="color: #333;">The server URL is <code>https://your-odoo-domain/mcp</code>. It must reach the right database directly:
+                either the server hosts one database, or a database filter maps the hostname to it (Odoo 19 and 20 clients may also send an
+                <code>X-Odoo-Database</code> header).</p>
+        </div>
+    </div>
+</section>
+
+<section class="container" style="padding: 16px 0;">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <h3 style="font-size: 24px; font-weight: 700; color: #111413;">Questions</h3>
+            <p style="margin-top: 14px;"><b>Where does my data go?</b><br/>
+                The app only answers requests from the AI client you connect, with the key you give it. The data in those answers is
+                sent to that client and, through it, to the AI provider you use. Nothing is sent anywhere else and the app makes no
+                outside connection. Disable a model, or revoke the key, to stop it.</p>
+            <p><b>Can the assistant change data?</b><br/>
+                Not with this app: every tool is read-only.</p>
+            <p><b>Does it work with Claude.ai or ChatGPT in the browser?</b><br/>
+                Those web connectors sign in with OAuth rather than an API key: add the "MCP Server Pro" app for that. Desktop and
+                command-line clients (Claude Code, Claude Desktop, Cursor, VS Code and others) work with an API key and this app alone.</p>
+            <p><b>Odoo 20 Enterprise has its own MCP. Why this app?</b><br/>
+                This app works on Community and on Odoo 18, 19 and 20, does not use Odoo AI credits, lets you choose the exposed models,
+                and logs every call.</p>
+            <p><b>Can I use it on Odoo Online?</b><br/>
+                No. Odoo does not allow third-party apps with Python code on Odoo Online. It works on Odoo.sh and on your own server.</p>
+        </div>
+    </div>
+</section>
+
+<section class="container" style="padding: 16px 0 40px 0;">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1" style="border-top: 1px solid #e4e7e5; padding-top: 20px;">
+            <h3 style="font-size: 20px; font-weight: 700; color: #111413;">Support</h3>
+            <p style="color: #333;">
+                Questions and bug reports: <a href="mailto:odoo@calderkit.com">odoo@calderkit.com</a>.
+                We answer in writing within two business days.
+            </p>
+            <p style="color: #6a716e; font-size: 14px;">Made by Calderkit. Released under the LGPL-3 license.</p>
+        </div>
+    </div>
+</section>

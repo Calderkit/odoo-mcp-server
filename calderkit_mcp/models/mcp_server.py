@@ -132,33 +132,54 @@ class CalderkitMcpServer(models.AbstractModel):
         """{name: (definition, method name)} of the available tools."""
         readonly = {'readOnlyHint': True, 'destructiveHint': False,
                     'idempotentHint': True, 'openWorldHint': False}
-        model_prop = {'type': 'string', 'description': "Technical model name, e.g. 'res.partner'."}
+        model_prop = {
+            'type': 'string',
+            'description': "Technical model name from odoo_list_models, e.g. 'res.partner' or "
+                           "'sale.order'.",
+        }
         domain_prop = {
             'type': 'array', 'default': [],
-            'description': "Odoo domain, e.g. [[\"customer_rank\", \">\", 0], [\"country_id.code\", \"=\", \"BE\"]].",
+            'description': "Odoo domain: a list of [field, operator, value] conditions, combined with "
+                           "AND unless prefixed by '|' (OR) or '!' (NOT). A dotted path follows a "
+                           "relation to another available model, e.g. 'country_id.code'. Omit or [] "
+                           "to match every record you can see; archived records are left out unless "
+                           "the domain has a condition on active. Example: [[\"customer_rank\", \">\", 0], "
+                           "[\"country_id.code\", \"=\", \"BE\"]].",
         }
         fields_prop = {
             'type': 'array', 'items': {'type': 'string'},
-            'description': 'Field names to return. Leave empty for a sensible default set.',
+            'description': "Field names to return, from odoo_describe_model. Omit for a default "
+                           "selection.",
         }
         return {
             'odoo_context': ({
                 'name': 'odoo_context',
                 'title': 'Current user and date',
-                'description': 'Who you are connected as, the current company, language, '
-                               'time zone, the current date and time, and the Odoo version.',
+                'description': "Return the session context: who you are connected as (user id, name, "
+                               "login), the current company and its currency, the companies you can "
+                               "access, language, time zone, today's date in that time zone "
+                               "('YYYY-MM-DD'), the current UTC date and time ('YYYY-MM-DD HH:MM:SS') and "
+                               "the Odoo version. Use it to resolve relative dates such as 'last "
+                               "quarter', the current user or company, or the current company's currency. It "
+                               "reads no business records. No arguments.",
                 'inputSchema': {'type': 'object', 'additionalProperties': False},
                 'annotations': readonly,
             }, '_tool_context'),
             'odoo_list_models': ({
                 'name': 'odoo_list_models',
                 'title': 'List available models',
-                'description': 'Models (tables) you are allowed to use, with a short hint '
-                               'about what each one holds.',
+                'description': "List the Odoo models (tables) you may query, all in one response: "
+                               "technical name, label, the administrator's hint about what each one "
+                               "holds, and can_write (whether changes are allowed on it). Only models "
+                               "enabled by the administrator that you can read are included. Use it to "
+                               "find a model name you do not know yet; use odoo_describe_model for a "
+                               "model's fields and odoo_search for its records.",
                 'inputSchema': {
                     'type': 'object',
-                    'properties': {'search': {'type': 'string',
-                                              'description': 'Optional text to filter models.'}},
+                    'properties': {'search': {
+                        'type': 'string',
+                        'description': "Case-insensitive text matched against the technical name, "
+                                       "label and hint, e.g. 'invoice'. Omit to list every model."}},
                     'additionalProperties': False,
                 },
                 'annotations': readonly,
@@ -166,8 +187,14 @@ class CalderkitMcpServer(models.AbstractModel):
             'odoo_describe_model': ({
                 'name': 'odoo_describe_model',
                 'title': 'Describe a model',
-                'description': 'Fields of a model: technical name, label, type, related model, '
-                               'selection values. Use it before building a domain.',
+                'description': "Describe the fields of one model: for each field its type, label, "
+                               "related model (and whether that model is available too), selection "
+                               "values, help text, and required, readonly or not-stored flags. Also "
+                               "returns the model's hint, default_fields and max_records_per_call. Use "
+                               "it before filtering, sorting, grouping or choosing fields on a model you "
+                               "have not used yet; it returns no records (use odoo_search for data). "
+                               "Passwords, tokens, keys, files and fields hidden by the administrator "
+                               "are never listed and cannot be used.",
                 'inputSchema': {
                     'type': 'object',
                     'properties': {'model': model_prop},
@@ -179,18 +206,29 @@ class CalderkitMcpServer(models.AbstractModel):
             'odoo_search': ({
                 'name': 'odoo_search',
                 'title': 'Search records',
-                'description': 'Find records matching a domain and return their fields. '
-                               'Returns the total number of matches and one page of records.',
+                'description': "Find the records of one model that match a domain and return one page "
+                               "of them with the requested fields, plus total (all matches), offset and "
+                               "has_more; page with offset while has_more is true. Use it when you need "
+                               "the records themselves. For known ids use odoo_read, for a number only "
+                               "odoo_count, for totals per group odoo_aggregate. You only see records "
+                               "your access rights allow. Many2one values come as {id, name}, one2many "
+                               "and many2many as {count, ids} (first 50 ids), long texts are cut at "
+                               "4,000 characters.",
                 'inputSchema': {
                     'type': 'object',
                     'properties': {
                         'model': model_prop,
                         'domain': domain_prop,
                         'fields': fields_prop,
-                        'limit': {'type': 'integer', 'minimum': 1, 'maximum': 500, 'default': 20},
-                        'offset': {'type': 'integer', 'minimum': 0, 'default': 0},
+                        'limit': {'type': 'integer', 'minimum': 1, 'maximum': 500, 'default': 20,
+                                  'description': "Records per page. Values above the model's "
+                                                 "max_records_per_call (usually 200) are reduced to it."},
+                        'offset': {'type': 'integer', 'minimum': 0, 'default': 0,
+                                   'description': 'Number of matching records to skip, for paging.'},
                         'order': {'type': 'string',
-                                  'description': "Sort order, e.g. 'date_order desc, id desc'."},
+                                  'description': "Sort order on fields of this model, e.g. "
+                                                 "'date_order desc, id desc'. Default: the model's own "
+                                                 "order."},
                     },
                     'required': ['model'],
                     'additionalProperties': False,
@@ -200,12 +238,19 @@ class CalderkitMcpServer(models.AbstractModel):
             'odoo_read': ({
                 'name': 'odoo_read',
                 'title': 'Read records',
-                'description': 'Read records by id.',
+                'description': "Read specific records of one model by id, at most 100 per call, and "
+                               "return their fields as {model, count, records}. Use it when you already "
+                               "have ids (from odoo_search, a relation field or the user); to find "
+                               "records by criteria use odoo_search, for a number only odoo_count. Ids "
+                               "that do not exist are listed in missing_ids instead of failing; if one "
+                               "of the records is outside your access rights, the call fails with an "
+                               "access error. Values are formatted as in odoo_search.",
                 'inputSchema': {
                     'type': 'object',
                     'properties': {
                         'model': model_prop,
-                        'ids': {'type': 'array', 'items': {'type': 'integer'}, 'maxItems': 100},
+                        'ids': {'type': 'array', 'items': {'type': 'integer'}, 'maxItems': 100,
+                                'description': 'Record ids to read, e.g. [7, 12]. At most 100.'},
                         'fields': fields_prop,
                     },
                     'required': ['model', 'ids'],
@@ -216,7 +261,11 @@ class CalderkitMcpServer(models.AbstractModel):
             'odoo_count': ({
                 'name': 'odoo_count',
                 'title': 'Count records',
-                'description': 'Number of records matching a domain.',
+                'description': "Count the records of one model that match a domain and return {model, "
+                               "count}. Use it when you need only the number: it reads no records, so it "
+                               "is cheaper than odoo_search. Without a domain it counts every record you "
+                               "can see, archived ones excluded. For counts per group use odoo_aggregate with '__count'; to get "
+                               "the records use odoo_search.",
                 'inputSchema': {
                     'type': 'object',
                     'properties': {'model': model_prop, 'domain': domain_prop},
@@ -228,22 +277,34 @@ class CalderkitMcpServer(models.AbstractModel):
             'odoo_aggregate': ({
                 'name': 'odoo_aggregate',
                 'title': 'Totals by group',
-                'description': "Group records and compute totals, e.g. sales per customer per month. "
-                               "groupby items: 'partner_id' or 'date_order:month' (day, week, month, "
-                               "quarter, year). measures: '__count' or 'amount_total:sum' (sum, avg, "
-                               "min, max, count, count_distinct).",
+                'description': "Group the records of one model that match a domain and compute totals "
+                               "per group, e.g. sales per customer per month, and return {model, "
+                               "groupby, measures, count, rows} with one key per groupby item and "
+                               "measure in each row; many2one groups come as {id, name}. Without groupby "
+                               "it returns one row for all matching records. Use it for sums, averages "
+                               "or counts per group instead of reading many records; use odoo_count for "
+                               "a single number and odoo_search for the records themselves.",
                 'inputSchema': {
                     'type': 'object',
                     'properties': {
                         'model': model_prop,
                         'domain': domain_prop,
-                        'groupby': {'type': 'array', 'items': {'type': 'string'}, 'default': []},
+                        'groupby': {'type': 'array', 'items': {'type': 'string'}, 'default': [],
+                                    'description': "Fields to group by. Date and datetime fields need "
+                                                   ":day, :week, :month, :quarter or :year, e.g. "
+                                                   "['partner_id', 'date_order:month']."},
                         'measures': {'type': 'array', 'items': {'type': 'string'},
-                                     'default': ['__count']},
+                                     'default': ['__count'],
+                                     'description': "'__count' for the number of records, or "
+                                                    "'field:function' with sum, avg, min, max, count or "
+                                                    "count_distinct, e.g. 'amount_total:sum'."},
                         'order': {'type': 'string',
-                                  'description': "Sort groups, e.g. 'amount_total:sum desc' or "
-                                                 "'__count desc'. Default: by group."},
-                        'limit': {'type': 'integer', 'minimum': 1, 'maximum': 500, 'default': 100},
+                                  'description': "Sort groups by a groupby item or measure given above, "
+                                                 "e.g. 'amount_total:sum desc' or '__count desc'. "
+                                                 "Default: by group."},
+                        'limit': {'type': 'integer', 'minimum': 1, 'maximum': 500, 'default': 100,
+                                  'description': "Maximum number of groups. Values above the model's "
+                                                 "max_records_per_call (usually 200) are reduced to it."},
                     },
                     'required': ['model'],
                     'additionalProperties': False,
